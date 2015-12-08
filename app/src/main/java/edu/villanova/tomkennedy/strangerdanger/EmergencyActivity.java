@@ -70,8 +70,9 @@ public class EmergencyActivity extends Activity {
 
     public void onDestroy(){
         super.onDestroy();
+        if (mRecorder != null){
         mRecorder.release();
-        mRecorder = null;
+        mRecorder = null;}
     }
 
     public void recordPress(View v){
@@ -165,17 +166,19 @@ public class EmergencyActivity extends Activity {
     };
 
 
-    public void sendText(){
-        Intent sendIntent = new Intent(Intent.ACTION_SEND);
-        sendIntent.setClassName("com.android.mms", "com.android.mms.ui.ComposeMessageActivity");
-        sendIntent.putExtra("address", "2034707612");
-        sendIntent.putExtra("sms_body", "if you are sending text");
+    public void sendText(View view){
+        Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+        sendIntent.setData(Uri.parse("mms:" + "2034707612"));
+        sendIntent.putExtra("sms_body", "HELP! My current GPS coordinates are Lat: " + lat + " Lon: " + lon);
+
+
         final File file1 = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),"StrangerAudio.3gp");
         Uri uri = Uri.fromFile(file1);
 
         sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
         sendIntent.setType("audio/3gp");
-        startActivity(Intent.createChooser(sendIntent, "Send file"));
+
+        startActivity(sendIntent);
 
     }
 
