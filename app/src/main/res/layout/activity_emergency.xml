@@ -14,27 +14,32 @@
         android:minHeight="200dp"
         android:minWidth="200dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="false"
+        android:layout_alignParentLeft="true"
         android:layout_centerHorizontal="true"
-        android:background="#5b5a5c" />
+        android:background="#5b5a5c"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentRight="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Send Message"
+        android:text="Send GPS Coordinates via SMS"
         android:id="@+id/sendButton"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="0dp"
         android:minWidth="200dp"
-        android:minHeight="100dp"
-        android:onClick="sendText"/>
+        android:minHeight="200dp"
+        android:onClick="sendGPS"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true"
+        android:background="#007913" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Click to record message."
+        android:text="Send Audio via Email"
         android:id="@+id/textView"
         android:layout_below="@+id/recordButton"
         android:layout_centerHorizontal="true"
