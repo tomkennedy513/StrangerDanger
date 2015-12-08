@@ -10,9 +10,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +24,7 @@ public class ContactsActivity extends ListActivity implements View.OnClickListen
     public String contactPhone;
     public String contactName;
     public List<Contact> contactValues = new ArrayList<>();
+    public int idValue;
     SQLiteHelper db = new SQLiteHelper(this);
     ArrayAdapter<Contact> adapter;
 
@@ -34,38 +34,66 @@ public class ContactsActivity extends ListActivity implements View.OnClickListen
         setContentView(R.layout.activity_contact);
         Button addContactButton = (Button) findViewById(R.id.addContact);
         addContactButton.setOnClickListener(this);
-        final ListView myList = (ListView)findViewById(R.id.list);
-        myList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Contact contact = (Contact) myList.getItemAtPosition(position);
-                int idValue = contact.getID();
-                EditText edittext = (EditText)findViewById(R.id.contactID);
-                edittext.setText(idValue, TextView.BufferType.EDITABLE);
-            }
-        });
+        Button deleteContactButton = (Button) findViewById(R.id.deleteContact);
+        deleteContactButton.setOnClickListener(this);
+        Button refresh = (Button) findViewById(R.id.refreshButton);
+        refresh.setOnClickListener(this);
+
         contactValues = db.getAllContacts();
         Log.d("test", contactValues.toString());
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, contactValues);
         setListAdapter(adapter);
+        ListView myList = getListView();
+        myList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> av, View view, int position, long id) {
+                Contact contact = (Contact) av.getItemAtPosition(position);
+                idValue = contact.getID();
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
-        Intent i = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
-        startActivityForResult(i, PICK_CONTACT);
+        switch (v.getId()) {
+            case R.id.deleteContact:
+                Contact contact = db.getContact(idValue);
+                if(contact.getID() >= 1){
+                    db.deleteContact(contact);
+                }
+                contactValues = db.getAllContacts();
+                adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, contactValues);
+                setListAdapter(adapter);
+                adapter.notifyDataSetChanged();
+
+                break;
+            case R.id.addContact:
+                Intent i = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
+                startActivityForResult(i, PICK_CONTACT);
+                break;
+            case R.id.refreshButton:
+                contactValues = db.getAllContacts();
+                adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, contactValues);
+                setListAdapter(adapter);
+                adapter.notifyDataSetChanged();
+                break;
+        }
+
     }
 
     public void onStart(){
         super.onStart();
+        contactValues = db.getAllContacts();
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, contactValues);
+        setListAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
     }
     public void onResume(){
         super.onResume();
         contactValues = db.getAllContacts();
-        //Log.d("test", contactValues.toString());
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, contactValues);
         setListAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
 

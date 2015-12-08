@@ -9,10 +9,11 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="265dp"
-        android:id="@+id/list"
-        android:layout_weight="0.47"
+        android:id="@android:id/list"
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="0dp"
+        android:listSelector="#00CCFF"
+        android:visibility="visible"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_above="@+id/addContact" />
@@ -24,43 +25,28 @@
         android:id="@+id/addContact"
         android:enabled="true"
         android:layout_marginLeft="0dp"
-        android:layout_above="@+id/deleteContact"
-        android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/deleteContact" />
-
-    <EditText
-        android:layout_width="178dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/contactID"
-        android:editable="true"
-        android:inputType="text"
-        android:text="Enter ID to Delete"
-        android:layout_gravity="right"
-        android:layout_marginLeft="5dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:textIsSelectable="true"
-        android:enabled="true" />
+        android:layout_alignParentStart="true" />
+
 
     <Button
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Delete Contact"
+        android:text="Delete Selected"
         android:id="@+id/deleteContact"
         android:layout_gravity="right"
         android:layout_marginLeft="0dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/contactID" />
+        android:layout_toEndOf="@+id/addContact" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Refresh"
         android:id="@+id/refreshButton"
-        android:layout_alignBottom="@+id/addContact"
-        android:layout_alignStart="@+id/contactID"
-        android:layout_alignEnd="@+id/contactID" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/deleteContact" />
 
 </RelativeLayout>
