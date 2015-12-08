@@ -67,11 +67,11 @@ public class SQLiteHelper extends SQLiteOpenHelper{
     }
 
     public List<Contact> getAllContacts(){
-        List<Contact> contacts = new LinkedList<Contact>();
+        List<Contact> contacts = new LinkedList<>();
         String query = "SELECT * FROM " + TABLE_CONTACTS;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
-        Contact contact = null;
+        Contact contact;
         if (cursor.moveToFirst()){
             do{
                 contact = new Contact();
