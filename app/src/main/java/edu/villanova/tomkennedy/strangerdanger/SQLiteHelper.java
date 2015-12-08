@@ -104,4 +104,5 @@ public class SQLiteHelper extends SQLiteOpenHelper{
         Log.d("deleteContact", contact.toString());
 
     }
+
 }
