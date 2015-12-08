@@ -4,11 +4,15 @@ package edu.villanova.tomkennedy.strangerdanger;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +20,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -27,15 +33,24 @@ public class EmergencyActivity extends Activity {
     boolean recording;
     double lat;
     double lon;
+    MediaRecorder mRecorder;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_emergency);
 
+        //Set record button
         recordbutton = (ImageButton) findViewById(R.id.recordButton);
         recordbutton.setImageResource(android.R.drawable.ic_btn_speak_now);
 
+
+
+
+        //Gather GPS Data
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -53,16 +68,43 @@ public class EmergencyActivity extends Activity {
 
     }
 
+    public void onDestroy(){
+        super.onDestroy();
+        mRecorder.release();
+        mRecorder = null;
+    }
+
     public void recordPress(View v){
         if (!recording){
             recordbutton.setImageResource(android.R.drawable.ic_media_pause);
             recordbutton.setBackgroundColor(0xFFFF0000);
             recording = true;
+
+            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/StrangerAudio.3gp");
+            if(file.exists()){file.delete();}
+
+            //Initialize Audio recording
+            mRecorder = new MediaRecorder();
+            mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+            mRecorder.setOutputFile(Environment.getExternalStorageDirectory().getAbsolutePath() + "/StrangerAudio.3gp");
+            mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+
+            try {
+                mRecorder.prepare();
+                mRecorder.start();
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         else {
             recordbutton.setImageResource(android.R.drawable.ic_btn_speak_now);
             recordbutton.setBackgroundColor(0xFF5B5A5C);
             recording = false;
+
+            mRecorder.stop();
         }
 
     }
@@ -121,6 +163,21 @@ public class EmergencyActivity extends Activity {
 
         }
     };
+
+
+    public void sendText(){
+        Intent sendIntent = new Intent(Intent.ACTION_SEND);
+        sendIntent.setClassName("com.android.mms", "com.android.mms.ui.ComposeMessageActivity");
+        sendIntent.putExtra("address", "2034707612");
+        sendIntent.putExtra("sms_body", "if you are sending text");
+        final File file1 = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),"StrangerAudio.3gp");
+        Uri uri = Uri.fromFile(file1);
+
+        sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
+        sendIntent.setType("audio/3gp");
+        startActivity(Intent.createChooser(sendIntent, "Send file"));
+
+    }
 
 
 }
