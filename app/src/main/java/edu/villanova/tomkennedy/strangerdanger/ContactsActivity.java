@@ -7,8 +7,12 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +26,7 @@ public class ContactsActivity extends ListActivity implements View.OnClickListen
     public String contactName;
     public List<Contact> contactValues = new ArrayList<>();
     SQLiteHelper db = new SQLiteHelper(this);
+    ArrayAdapter<Contact> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +34,19 @@ public class ContactsActivity extends ListActivity implements View.OnClickListen
         setContentView(R.layout.activity_contact);
         Button addContactButton = (Button) findViewById(R.id.addContact);
         addContactButton.setOnClickListener(this);
-
+        final ListView myList = (ListView)findViewById(R.id.list);
+        myList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Contact contact = (Contact) myList.getItemAtPosition(position);
+                int idValue = contact.getID();
+                EditText edittext = (EditText)findViewById(R.id.contactID);
+                edittext.setText(idValue, TextView.BufferType.EDITABLE);
+            }
+        });
         contactValues = db.getAllContacts();
         Log.d("test", contactValues.toString());
-        ArrayAdapter<Contact> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, contactValues);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, contactValues);
         setListAdapter(adapter);
     }
 
@@ -48,7 +62,10 @@ public class ContactsActivity extends ListActivity implements View.OnClickListen
     }
     public void onResume(){
         super.onResume();
-
+        contactValues = db.getAllContacts();
+        //Log.d("test", contactValues.toString());
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, contactValues);
+        setListAdapter(adapter);
     }
 
 
@@ -64,6 +81,8 @@ public class ContactsActivity extends ListActivity implements View.OnClickListen
                 contactName = cursor.getString(column2);
                 cursor.close();
                 db.addContact(new Contact(contactName, contactPhone));
+                adapter.notifyDataSetChanged();
+
             }
         }
     }
