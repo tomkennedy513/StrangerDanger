@@ -66,4 +66,6 @@ public class ContactsActivity extends ListActivity implements View.OnClickListen
     }
 
 
+
+
 }
