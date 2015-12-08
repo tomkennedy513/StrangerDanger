@@ -129,7 +129,7 @@ public class ContactsActivity extends ListActivity implements View.OnClickListen
             cur = getContentResolver().query(uri, null, null, null, null);
             cur.moveToFirst();
             String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
-            contactName = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+            contactName = cur.getString(cur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null,
                     ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = ?",
                     new String[]{id}, null);
