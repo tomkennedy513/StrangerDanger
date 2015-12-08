@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -19,7 +20,7 @@ public class ContactsActivity extends ListActivity implements View.OnClickListen
     public final int PICK_CONTACT = 1001;
     public String contactPhone;
     public String contactName;
-    public ArrayList<Contact> contactValues = new ArrayList<>();
+    public List<Contact> contactValues = new ArrayList<>();
     SQLiteHelper db = new SQLiteHelper(this);
 
     @Override
@@ -28,9 +29,11 @@ public class ContactsActivity extends ListActivity implements View.OnClickListen
         setContentView(R.layout.activity_contact);
         Button addContactButton = (Button) findViewById(R.id.addContact);
         addContactButton.setOnClickListener(this);
+
+        contactValues = db.getAllContacts();
+        Log.d("test", contactValues.toString());
         ArrayAdapter<Contact> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, contactValues);
         setListAdapter(adapter);
-
     }
 
     @Override
