@@ -177,9 +177,7 @@ public class EmergencyActivity extends Activity {
 
 
     public void sendText(View view){
-        if (mRecorder != null){
-            mRecorder.release();
-            mRecorder = null;}
+        mRecorder.release();
         Intent sendIntent = new Intent(Intent.ACTION_SEND);
         sendIntent.setData(Uri.parse("mms:" + generatePhoneList()));
         sendIntent.putExtra("sms_body", "HELP! My current GPS coordinates are Lat: " + lat + " Lon: " + lon);
