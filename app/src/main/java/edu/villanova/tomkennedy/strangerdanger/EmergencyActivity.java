@@ -24,7 +24,7 @@ public class EmergencyActivity extends Activity {
         createEmergency();
     }
 
-    private void sendSMS(String phoneNumber, String message) {
+   /* private void sendSMS(String phoneNumber, String message) {
         ArrayList<PendingIntent> sentPendingIntents = new ArrayList<>();
         ArrayList<PendingIntent> deliveredPendingIntents = new ArrayList<>();
         try {
@@ -39,7 +39,7 @@ public class EmergencyActivity extends Activity {
             Toast.makeText(getBaseContext(), "SMS sending failed...", Toast.LENGTH_SHORT).show();
         }
 
-    }
+    }*/
 
     @SuppressWarnings("unused")
     private void createEmergency(/*String emergencyMessage*/){
