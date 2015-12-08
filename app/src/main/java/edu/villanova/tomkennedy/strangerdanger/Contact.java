@@ -6,17 +6,19 @@ public class Contact {
     private int id;
     private String name;
     private String number;
+    private String email;
 
     public Contact(){};
 
-    public Contact(String name, String number){
+    public Contact(String name, String number, String email){
         super();
         this.name = name;
         this.number = number;
+        this.email = email;
     }
     public String toString() {
         return "Contact [id=" + id + ", name=" + name + ", number=" + number
-                + "]";
+                + ", email=" + email + "]";
     }
 
     public String getName(){
@@ -32,6 +34,14 @@ public class Contact {
 
     public void setNumber(String number){
         this.number = number;
+    }
+
+    public String getEmail(){
+        return email;
+    }
+
+    public void setEmail(String email){
+        this.email = email;
     }
 
     public int getID(){
