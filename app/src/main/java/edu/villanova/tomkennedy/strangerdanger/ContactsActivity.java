@@ -57,25 +57,25 @@ public class ContactsActivity extends ListActivity implements View.OnClickListen
         super.onStart();
         SharedPreferences prefs = getSharedPreferences("key", 0);
         String restoredCSV = prefs.getString("csv", "");
-        if (restoredCSV != null) {
+        /*if (restoredCSV != null) {
             String[] restored = restoredCSV.split(",");
             for (int i = 0; i < restored.length; i++) {
                 contactPhone = restored[i];
                 addContact();
             }
-        }
+        }*/
     }
     public void onResume(){
         super.onResume();
         SharedPreferences prefs = getSharedPreferences("key",0);
         String restoredCSV = prefs.getString("csv", "");
-        if (restoredCSV != null){
+        /*if (restoredCSV != null){
             String[] restored = restoredCSV.split(",");
             for(int i =0; i < restored.length; i++){
                 contactPhone = restored[i];
                 addContact();
             }
-        }
+        }*/
     }
 
 
