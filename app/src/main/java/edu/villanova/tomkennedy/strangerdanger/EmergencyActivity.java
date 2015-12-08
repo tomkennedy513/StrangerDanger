@@ -193,7 +193,7 @@ public class EmergencyActivity extends Activity {
     public void sendGPS(View view) {
         Intent sendIntent = new Intent(Intent.ACTION_VIEW);
         sendIntent.setData(Uri.parse("smsto:" + generatePhoneList()));
-        sendIntent.putExtra("sms_body", "HELP! My current GPS coordinates are Lat: " + lat + " Lon: " + lon);
+        sendIntent.putExtra("sms_body", "HELP! My current GPS coordinates are Lat: " + lat + " Lon: " + lon + "   http://maps.google.com/maps?z=12&t=m&q=loc:" + lat + "+" + lon);
         //sendIntent.setType("vnd.android-dir/mms-sms");
         startActivity(sendIntent);
     }
@@ -203,7 +203,7 @@ public class EmergencyActivity extends Activity {
         emailIntent.setType("message/rfc822");
         emailIntent.putExtra(Intent.EXTRA_EMAIL, generateEmailList());
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "StrangerDanger ALERT!");
-        emailIntent.putExtra(Intent.EXTRA_TEXT, "HELP! My current GPS coordinates are Lat: " + lat + " Lon: " + lon + "\nPlease listen to my attached audio message.");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "HELP! My current GPS coordinates are Lat: " + lat + " Lon: " + lon + "\nPlease listen to my attached audio message. \nhttp://maps.google.com/maps?z=12&t=m&q=loc:"+lat+"+"+lon);
 
         final File file1 = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),"/StrangerAudio.mp3");
         Uri uri = Uri.parse("file://" + file1);
