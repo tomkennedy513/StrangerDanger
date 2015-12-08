@@ -99,6 +99,20 @@ public class EmergencyActivity extends Activity {
 
         return numbers;
     }
+
+
+    public String[] generateEmailList(){
+        contactValues = db.getAllContacts();
+        String emails[] = new String[100];
+        int i = 0;
+        for (Contact contact : contactValues) {
+           emails[i] = contact.getEmail();
+            i++;
+        }
+
+
+        return emails;
+    }
     
     
 
@@ -187,7 +201,7 @@ public class EmergencyActivity extends Activity {
     public void sendAudio(){//Send
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
         emailIntent.setType("message/rfc822");
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"mausland@villanova.edu"});
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, generateEmailList());
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "StrangerDanger ALERT!");
         emailIntent.putExtra(Intent.EXTRA_TEXT, "HELP! My current GPS coordinates are Lat: " + lat + " Lon: " + lon + "\nPlease listen to my attached audio message.");
 
