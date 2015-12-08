@@ -38,14 +38,7 @@ public class EmergencyActivity extends Activity {
 
     @SuppressWarnings("unused")
     private void createEmergency(/*String emergencyMessage*/){
-        ContactsActivity contactInstance = new ContactsActivity();
-        ArrayList<String> phoneNumbers = contactInstance.getNumbers();
-        for (final String number: phoneNumbers)
-        {
-            Log.d("phone number", number);
-            //sendSMS(number, emergencyMessage);
 
-        }
 
     }
 }
