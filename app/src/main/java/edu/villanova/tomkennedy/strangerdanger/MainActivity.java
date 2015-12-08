@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import edu.villanova.tkenned8.strangerdanger.R;
+import edu.villanova.tomkennedy.strangerdanger.R;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 

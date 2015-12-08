@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import edu.villanova.tkenned8.strangerdanger.R;
+import edu.villanova.tomkennedy.strangerdanger.R;
 
 /**
  * Created by TomKennedy on 11/25/2015.
