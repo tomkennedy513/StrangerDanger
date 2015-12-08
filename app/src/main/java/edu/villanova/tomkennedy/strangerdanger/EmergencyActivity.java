@@ -2,15 +2,10 @@ package edu.villanova.tomkennedy.strangerdanger;
 
 
 import android.app.Activity;
-import android.app.PendingIntent;
 import android.os.Bundle;
-import android.telephony.SmsManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-
-import edu.villanova.tkenned8.strangerdanger.R;
 
 /**
  * Created by TomKennedy on 11/25/2015.
