@@ -19,8 +19,8 @@ public class SQLiteHelper extends SQLiteOpenHelper{
     private static final String KEY_ID = "id";
     private static final String KEY_NAME = "name";
     private static final String KEY_NUMBER = "number";
-
-    private static final String[] COLUMNS = {KEY_ID,KEY_NAME,KEY_NUMBER};
+    private static final String KEY_EMAIL = "email";
+    private static final String[] COLUMNS = {KEY_ID,KEY_NAME,KEY_NUMBER,KEY_EMAIL};
 
     public SQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -31,7 +31,7 @@ public class SQLiteHelper extends SQLiteOpenHelper{
         String CREATE_CONTACT_TABLE = "CREATE TABLE Contact ( " +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "name TEXT, "+
-                "number TEXT )";
+                "number TEXT, " + "email TEXT )";
 
         db.execSQL(CREATE_CONTACT_TABLE);
     }
@@ -48,6 +48,7 @@ public class SQLiteHelper extends SQLiteOpenHelper{
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, contact.getName());
         values.put(KEY_NUMBER, contact.getNumber());
+        values.put(KEY_EMAIL, contact.getEmail());
         db.insert(TABLE_CONTACTS, null, values);
         db.close();
     }
@@ -62,6 +63,7 @@ public class SQLiteHelper extends SQLiteOpenHelper{
         contact.setId(Integer.parseInt(cursor.getString(0)));
         contact.setName(cursor.getString(1));
         contact.setNumber(cursor.getString(2));
+        contact.setEmail(cursor.getString(3));
         Log.d("getContact(" + id + ")", contact.toString());
         return contact;
     }
@@ -78,24 +80,16 @@ public class SQLiteHelper extends SQLiteOpenHelper{
                 contact.setId(Integer.parseInt(cursor.getString(0)));
                 contact.setName(cursor.getString(1));
                 contact.setNumber(cursor.getString(2));
+                contact.setEmail(cursor.getString(3));
 
                 contacts.add(contact);
             }while (cursor.moveToNext());
         }
+        cursor.close();
         Log.d("getAllContacts()", contacts.toString());
         return contacts;
     }
 
-    public int updateContact(Contact contact ){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("number", contact.getName());
-        values.put("number", contact.getNumber());
-
-        int i = db.update(TABLE_CONTACTS, values, KEY_ID+" = ?",new String[]{String.valueOf(contact.getID())});
-        db.close();
-        return i;
-    }
 
     public void deleteContact(Contact contact) {
         SQLiteDatabase db = this.getWritableDatabase();

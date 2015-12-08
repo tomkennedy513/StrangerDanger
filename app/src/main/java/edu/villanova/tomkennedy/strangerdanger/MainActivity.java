@@ -27,6 +27,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         Button emergencyButton = (Button) findViewById(R.id.emergencyButton);
         emergencyButton.setOnClickListener(this);
 
+
     }
 
 

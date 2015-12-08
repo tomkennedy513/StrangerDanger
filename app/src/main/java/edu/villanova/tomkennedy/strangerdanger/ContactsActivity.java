@@ -1,5 +1,6 @@
 package edu.villanova.tomkennedy.strangerdanger;
 import android.app.ListActivity;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -21,6 +22,7 @@ public class ContactsActivity extends ListActivity implements View.OnClickListen
     public final int PICK_CONTACT = 1001;
     public String contactPhone;
     public String contactName;
+    public String contactEmail;
     public List<Contact> contactValues = new ArrayList<>();
     public int idValue;
     SQLiteHelper db = new SQLiteHelper(this);
@@ -36,7 +38,6 @@ public class ContactsActivity extends ListActivity implements View.OnClickListen
         deleteContactButton.setOnClickListener(this);
         Button refresh = (Button) findViewById(R.id.refreshButton);
         refresh.setOnClickListener(this);
-
         contactValues = db.getAllContacts();
         Log.d("test", contactValues.toString());
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, contactValues);
@@ -65,7 +66,7 @@ public class ContactsActivity extends ListActivity implements View.OnClickListen
 
                 break;
             case R.id.addContact:
-                Intent i = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
+                Intent i = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
                 startActivityForResult(i, PICK_CONTACT);
                 break;
             case R.id.refreshButton:
@@ -97,7 +98,7 @@ public class ContactsActivity extends ListActivity implements View.OnClickListen
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PICK_CONTACT && resultCode == RESULT_OK) {
-            Uri contactUri = data.getData();
+            /*Uri contactUri = data.getData();
             Cursor cursor = getContentResolver().query(contactUri, null, null, null, null);
             if (cursor != null) {
                 cursor.moveToFirst();
@@ -105,14 +106,55 @@ public class ContactsActivity extends ListActivity implements View.OnClickListen
                 contactPhone = cursor.getString(column);
                 int column2 = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Identity.DISPLAY_NAME);
                 contactName = cursor.getString(column2);
-                cursor.close();
-                db.addContact(new Contact(contactName, contactPhone));
-                adapter.notifyDataSetChanged();
 
+                cursor.close();
             }
+
+            Cursor emailCur = getContentResolver().query(ContactsContract.CommonDataKinds.Email.CONTENT_URI,null,null,null,null);
+            while (emailCur.moveToNext()) {
+                int column3 = emailCur.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS);
+                contactEmail = cursor.getString(column3);
+            }
+            db.addContact(new Contact(contactName, contactPhone, contactEmail));
+            adapter.notifyDataSetChanged();*/
+            contactPicked(data);
         }
     }
+    private void contactPicked(Intent data) {
+        ContentResolver cr = getContentResolver();
+        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+        cur.moveToFirst();
+        try {
+            Uri uri = data.getData();
+            cur = getContentResolver().query(uri, null, null, null, null);
+            cur.moveToFirst();
+            String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
+            contactName = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+            Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null,
+                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = ?",
+                    new String[]{id}, null);
+            while (pCur.moveToNext()) {
+                contactPhone = pCur.getString(
+                        pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+            }
+            pCur.close();
+            Cursor emailCur = cr.query(
+                    ContactsContract.CommonDataKinds.Email.CONTENT_URI,
+                    null,
+                    ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?",
+                    new String[]{id}, null);
+            while (emailCur.moveToNext()) {
+                contactEmail = emailCur.getString(
+                        emailCur.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS));
 
+            }
+            emailCur.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        db.addContact(new Contact(contactName, contactPhone, contactEmail));
+        adapter.notifyDataSetChanged();
+    }
 
 
 
