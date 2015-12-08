@@ -9,9 +9,60 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageButton"
-        android:src="@android:drawable/ic_btn_speak_now"
+        android:id="@+id/recordButton"
+        android:onClick="recordPress"
+        android:minHeight="200dp"
+        android:minWidth="200dp"
         android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="false"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="63dp" />
+        android:background="#5b5a5c" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send Message"
+        android:id="@+id/sendButton"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:minWidth="200dp"
+        android:minHeight="100dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Click to record message."
+        android:id="@+id/textView"
+        android:layout_below="@+id/recordButton"
+        android:layout_centerHorizontal="true"
+        android:onClick="recordPress"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="GPS:"
+        android:id="@+id/gpstext"
+        android:layout_above="@+id/latitude"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Lat: "
+        android:id="@+id/latitude"
+        android:layout_above="@+id/longitude"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Lon: "
+        android:id="@+id/longitude"
+        android:layout_above="@+id/sendButton"
+        android:layout_alignStart="@+id/latitude" />
 </RelativeLayout>
