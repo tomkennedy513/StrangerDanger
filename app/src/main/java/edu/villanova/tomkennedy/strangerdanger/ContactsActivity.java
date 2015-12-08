@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,7 +19,7 @@ public class ContactsActivity extends ListActivity implements View.OnClickListen
     public final int PICK_CONTACT = 1001;
     public String contactPhone;
     public String contactName;
-    public List<Contact> contactValues = null;
+    public ArrayList<Contact> contactValues = new ArrayList<>();
     SQLiteHelper db = new SQLiteHelper(this);
 
     @Override
@@ -59,10 +60,8 @@ public class ContactsActivity extends ListActivity implements View.OnClickListen
                 int column2 = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Identity.DISPLAY_NAME);
                 contactName = cursor.getString(column2);
                 cursor.close();
-                db.addContact(new Contact(contactName,contactPhone));
+                db.addContact(new Contact(contactName, contactPhone));
             }
-
-
         }
     }
 
