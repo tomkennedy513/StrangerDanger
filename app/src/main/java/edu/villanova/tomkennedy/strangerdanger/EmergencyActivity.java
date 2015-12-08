@@ -101,7 +101,7 @@ public class EmergencyActivity extends Activity {
     }
 
 
-    public String[] generateEmailList(){
+    public String[] generateEmailList(){//
         contactValues = db.getAllContacts();
         String emails[] = new String[100];
         int i = 0;
