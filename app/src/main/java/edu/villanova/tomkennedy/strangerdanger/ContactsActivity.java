@@ -13,7 +13,7 @@ import android.widget.Button;
 
 import java.util.ArrayList;
 
-import edu.villanova.tkenned8.strangerdanger.R;
+import edu.villanova.tomkennedy.strangerdanger.R;
 
 import static android.text.TextUtils.join;
 
