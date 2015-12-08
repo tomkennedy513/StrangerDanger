@@ -108,14 +108,14 @@ public class EmergencyActivity extends Activity {
             recordbutton.setBackgroundColor(0xFFFF0000);
             recording = true;
 
-            File file = new File(getFilesDir() + "/StrangerAudio.mp4");
+            File file = new File(getFilesDir() + "/StrangerAudio.3gp");
             if(file.exists()){file.delete();}
 
             //Initialize Audio recording
             mRecorder = new MediaRecorder();
             mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-            mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-            mRecorder.setOutputFile(getFilesDir() + "/StrangerAudio.mp4");
+            mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+            mRecorder.setOutputFile(getFilesDir() + "/StrangerAudio.3gp");
             mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 
             try {
@@ -135,7 +135,7 @@ public class EmergencyActivity extends Activity {
             mRecorder.stop();
 
             MediaPlayer mediaPlayer = new MediaPlayer();
-            mediaPlayer.setDataSource(getFilesDir() + "/StrangerAudio.mp4");
+            mediaPlayer.setDataSource(getFilesDir() + "/StrangerAudio.3gp");
             mediaPlayer.prepare();
             mediaPlayer.start();
 
@@ -177,16 +177,16 @@ public class EmergencyActivity extends Activity {
 
 
     public void sendText(View view){
-        Intent sendIntent = new Intent(Intent.ACTION_SEND);
+        Intent sendIntent = new Intent(Intent.ACTION_VIEW);
         sendIntent.setData(Uri.parse("mms:" + generatePhoneList()));
         sendIntent.putExtra("sms_body", "HELP! My current GPS coordinates are Lat: " + lat + " Lon: " + lon);
         sendIntent.setClassName("com.android.mms", "com.android.mms.ui.ComposeMessageActivity");
 
-       // final File file1 = new File(getFilesDir(),"/StrangerAudio.mp4");
-       // Uri uri = Uri.fromFile(file1);
+        final File file1 = new File(getFilesDir(),"/StrangerAudio.3gp");
+        Uri uri = Uri.fromFile(file1);
 
-      //  sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
-       // sendIntent.setType("audio/mp4");
+        sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
+        sendIntent.setType("audio/3gp");
 
         startActivity(sendIntent);
 
