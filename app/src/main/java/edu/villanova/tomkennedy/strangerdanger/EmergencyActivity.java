@@ -184,7 +184,7 @@ public class EmergencyActivity extends Activity {
         startActivity(sendIntent);
     }
 
-    public void sendAudio(){
+    public void sendAudio(){//Send
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
         emailIntent.setType("message/rfc822");
         emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"mausland@villanova.edu"});
