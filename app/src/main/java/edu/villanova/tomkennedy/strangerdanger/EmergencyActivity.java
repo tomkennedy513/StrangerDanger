@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
@@ -75,20 +76,20 @@ public class EmergencyActivity extends Activity {
         mRecorder = null;}
     }
 
-    public void recordPress(View v){
+    public void recordPress(View v) throws IOException {
         if (!recording){
             recordbutton.setImageResource(android.R.drawable.ic_media_pause);
             recordbutton.setBackgroundColor(0xFFFF0000);
             recording = true;
 
-            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/StrangerAudio.3gp");
+            File file = new File(getFilesDir() + "/StrangerAudio.mp4");
             if(file.exists()){file.delete();}
 
             //Initialize Audio recording
             mRecorder = new MediaRecorder();
             mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-            mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-            mRecorder.setOutputFile(Environment.getExternalStorageDirectory().getAbsolutePath() + "/StrangerAudio.3gp");
+            mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+            mRecorder.setOutputFile(getFilesDir() + "/StrangerAudio.mp4");
             mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 
             try {
@@ -106,27 +107,16 @@ public class EmergencyActivity extends Activity {
             recording = false;
 
             mRecorder.stop();
+
+            MediaPlayer mediaPlayer = new MediaPlayer();
+            mediaPlayer.setDataSource(getFilesDir() + "/StrangerAudio.mp4");
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+
         }
 
     }
 
-
-   /* private void sendSMS(String phoneNumber, String message) {
-        ArrayList<PendingIntent> sentPendingIntents = new ArrayList<>();
-        ArrayList<PendingIntent> deliveredPendingIntents = new ArrayList<>();
-        try {
-            SmsManager sms = SmsManager.getDefault();
-            ArrayList<String> mSMSMessage = sms.divideMessage(message);
-            sms.sendMultipartTextMessage(phoneNumber, null, mSMSMessage,
-                    sentPendingIntents, deliveredPendingIntents);
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-            Toast.makeText(getBaseContext(), "SMS sending failed...", Toast.LENGTH_SHORT).show();
-        }
-
-    }*/
 
     @SuppressWarnings("unused")
     private void createEmergency(/*String emergencyMessage*/){
@@ -170,13 +160,13 @@ public class EmergencyActivity extends Activity {
         Intent sendIntent = new Intent(Intent.ACTION_SEND);
         sendIntent.setData(Uri.parse("mms:" + "2034707612"));
         sendIntent.putExtra("sms_body", "HELP! My current GPS coordinates are Lat: " + lat + " Lon: " + lon);
-        sendIntent.setClassName("com.android.mms", "com.android.mms.ui.ComposeMessageActivity");
+       //sendIntent.setClassName("com.android.mms", "com.android.mms.ui.ComposeMessageActivity");
 
-        final File file1 = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),"/StrangerAudio.3gp");
+        final File file1 = new File(getFilesDir(),"/StrangerAudio.mp4");
         Uri uri = Uri.fromFile(file1);
 
         sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
-        sendIntent.setType("video/3gp");
+        sendIntent.setType("audio/mp4");
 
         startActivity(sendIntent);
 
