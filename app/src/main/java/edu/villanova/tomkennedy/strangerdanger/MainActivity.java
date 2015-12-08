@@ -1,13 +1,23 @@
 package edu.villanova.tomkennedy.strangerdanger;
+
+import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.Button;
-
-import edu.villanova.tomkennedy.strangerdanger.R;
+import android.widget.Toast;
 
 public class MainActivity extends Activity implements View.OnClickListener {
+    double lat;
+    double lon;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,19 +27,69 @@ public class MainActivity extends Activity implements View.OnClickListener {
         contactButton.setOnClickListener(this);
         Button emergencyButton = (Button) findViewById(R.id.emergencyButton);
         emergencyButton.setOnClickListener(this);
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, listener);
     }
 
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
+    public void onClick(View view) {
+        switch (view.getId()) {
             case R.id.emergencyButton:
-                Intent intent = new Intent(this, EmergencyActivity.class);
-                startService(intent);
+                /*Intent intent = new Intent(this, EmergencyActivity.class);
+                startService(intent);*/
+                locationTest();
+                break;
             case R.id.contactButton:
                 Intent intent2 = new Intent(this, ContactsActivity.class);
                 startActivity(intent2);
                 break;
         }
     }
+
+    public void locationTest(){
+        Context context = getApplicationContext();
+        String text = "Lat = " + lat + ", Lon = " + lon;
+        int duration = Toast.LENGTH_LONG;
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
+    }
+
+
+    LocationListener listener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+            lat = (double) location.getLatitude();
+            lon = (double) location.getLongitude();
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+
+        }
+    };
+
+
 }
+
