@@ -14,11 +14,13 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="View Emergency Contacts"
+        android:text="Set Emergency Contacts"
         android:id="@+id/contactButton"
-        android:layout_marginTop="68dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:minHeight="150dp" />
 
     <Button
         android:layout_width="wrap_content"
@@ -26,11 +28,14 @@
         android:text="EMERGENCY MESSAGE"
         android:id="@+id/emergencyButton"
         android:textSize="24sp"
-        android:layout_below="@+id/contactButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="166dp"
         android:textStyle="bold"
         android:typeface="sans"
-        style="@style/AppTheme" />
+        style="@style/AppTheme"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/contactButton"
+        android:background="#ff0000" />
 
 </RelativeLayout>

@@ -27,7 +27,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
         android:minWidth="200dp"
-        android:minHeight="100dp" />
+        android:minHeight="100dp"
+        android:onClick="sendText"/>
 
     <TextView
         android:layout_width="wrap_content"
