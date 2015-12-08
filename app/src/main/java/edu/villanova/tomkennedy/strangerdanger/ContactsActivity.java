@@ -1,21 +1,16 @@
 package edu.villanova.tomkennedy.strangerdanger;
 import android.app.ListActivity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 import java.util.ArrayList;
-
-import edu.villanova.tomkennedy.strangerdanger.R;
-
-import static android.text.TextUtils.join;
+import java.util.List;
 
 /**
  * Created by TomKennedy on 11/25/2015.
@@ -23,27 +18,18 @@ import static android.text.TextUtils.join;
 public class ContactsActivity extends ListActivity implements View.OnClickListener {
     public final int PICK_CONTACT = 1001;
     public String contactPhone;
-    public ArrayList<String> contactValues = new ArrayList<>();
-    public String csv;
-    ArrayAdapter<String> adapter;
+    public String contactName;
+    public ArrayList<Contact> contactValues = new ArrayList<>();
+    SQLiteHelper db = new SQLiteHelper(this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact);
         Button addContactButton = (Button) findViewById(R.id.addContact);
         addContactButton.setOnClickListener(this);
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, contactValues);
+        ArrayAdapter<Contact> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, contactValues);
         setListAdapter(adapter);
-        /*SharedPreferences prefs = getSharedPreferences("key", 0);
-        String restoredCSV = prefs.getString("csv", "");
-        if (restoredCSV != null){
-            String[] restored = restoredCSV.split(",");
-            for(int i =0; i < restored.length; i++){
-                contactPhone = restored[i];
-                addContact();
-            }
-        }*/
-       //removeContact();
 
     }
 
@@ -55,27 +41,11 @@ public class ContactsActivity extends ListActivity implements View.OnClickListen
 
     public void onStart(){
         super.onStart();
-        SharedPreferences prefs = getSharedPreferences("key", 0);
-        String restoredCSV = prefs.getString("csv", "");
-        /*if (restoredCSV != null) {
-            String[] restored = restoredCSV.split(",");
-            for (int i = 0; i < restored.length; i++) {
-                contactPhone = restored[i];
-                addContact();
-            }
-        }*/
+
     }
     public void onResume(){
         super.onResume();
-        SharedPreferences prefs = getSharedPreferences("key",0);
-        String restoredCSV = prefs.getString("csv", "");
-        /*if (restoredCSV != null){
-            String[] restored = restoredCSV.split(",");
-            for(int i =0; i < restored.length; i++){
-                contactPhone = restored[i];
-                addContact();
-            }
-        }*/
+
     }
 
 
@@ -87,37 +57,13 @@ public class ContactsActivity extends ListActivity implements View.OnClickListen
                 cursor.moveToFirst();
                 int column = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
                 contactPhone = cursor.getString(column);
+                int column2 = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Identity.DISPLAY_NAME);
+                contactName = cursor.getString(column2);
                 cursor.close();
+                db.addContact(new Contact(contactName, contactPhone));
             }
-            addContact();
-
         }
     }
 
-    public void addContact(){
-        contactValues.add(contactPhone);
-        adapter.notifyDataSetChanged();
-        SharedPreferences prefs = getSharedPreferences("key",0);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(contactPhone, contactPhone);
-        editor.apply();
-        //csv = join(",", contactValues);
-        Log.d("test", csv);
-    }
 
-    @SuppressWarnings("unused")
-    public ArrayList<String> getNumbers(){
-        return contactValues;
-    }
-
-
-    public void removeContact(){
-        contactValues.clear();
-        SharedPreferences p = getSharedPreferences("key",0);
-        SharedPreferences.Editor editor = p.edit();
-        editor.clear();
-        editor.apply();
-        adapter.notifyDataSetChanged();
-
-    }
 }
