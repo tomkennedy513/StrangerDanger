@@ -24,6 +24,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by TomKennedy on 11/25/2015.
@@ -36,7 +37,8 @@ public class EmergencyActivity extends Activity {
     double lon;
     MediaRecorder mRecorder;
 
-
+    public List<Contact> contactValues = new ArrayList<>();
+    SQLiteHelper db = new SQLiteHelper(this);
 
 
     @Override
@@ -75,6 +77,30 @@ public class EmergencyActivity extends Activity {
         mRecorder.release();
         mRecorder = null;}
     }
+    
+    public String generatePhoneList(){
+        contactValues = db.getAllContacts();
+        String numbers = "";
+        String temp;
+        int i = 0;
+        for (Contact contact : contactValues) {
+            if(i != 0){numbers += ", ";}
+            temp = contact.getNumber();
+            temp = temp.replace(" ", "");
+            temp = temp.replace("(", "");
+            temp = temp.replace(")", "");
+            temp = temp.replace("-", "");
+
+            numbers += temp;
+            i++;
+        }
+
+        Log.d("TEST ", numbers);
+
+        return numbers;
+    }
+    
+    
 
     public void recordPress(View v) throws IOException {
         if (!recording){
@@ -118,12 +144,6 @@ public class EmergencyActivity extends Activity {
     }
 
 
-    @SuppressWarnings("unused")
-    private void createEmergency(/*String emergencyMessage*/){
-
-
-    }
-
 
     LocationListener listener = new LocationListener() {
         @Override
@@ -158,15 +178,15 @@ public class EmergencyActivity extends Activity {
 
     public void sendText(View view){
         Intent sendIntent = new Intent(Intent.ACTION_SEND);
-        sendIntent.setData(Uri.parse("mms:" + "2034707612"));
+        sendIntent.setData(Uri.parse("mms:" + generatePhoneList()));
         sendIntent.putExtra("sms_body", "HELP! My current GPS coordinates are Lat: " + lat + " Lon: " + lon);
-       //sendIntent.setClassName("com.android.mms", "com.android.mms.ui.ComposeMessageActivity");
+        sendIntent.setClassName("com.android.mms", "com.android.mms.ui.ComposeMessageActivity");
 
-        final File file1 = new File(getFilesDir(),"/StrangerAudio.mp4");
-        Uri uri = Uri.fromFile(file1);
+       // final File file1 = new File(getFilesDir(),"/StrangerAudio.mp4");
+       // Uri uri = Uri.fromFile(file1);
 
-        sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
-        sendIntent.setType("audio/mp4");
+      //  sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
+       // sendIntent.setType("audio/mp4");
 
         startActivity(sendIntent);
 
