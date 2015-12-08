@@ -167,16 +167,16 @@ public class EmergencyActivity extends Activity {
 
 
     public void sendText(View view){
-        Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+        Intent sendIntent = new Intent(Intent.ACTION_SEND);
         sendIntent.setData(Uri.parse("mms:" + "2034707612"));
         sendIntent.putExtra("sms_body", "HELP! My current GPS coordinates are Lat: " + lat + " Lon: " + lon);
+        sendIntent.setClassName("com.android.mms", "com.android.mms.ui.ComposeMessageActivity");
 
-
-        final File file1 = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),"StrangerAudio.3gp");
+        final File file1 = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),"/StrangerAudio.3gp");
         Uri uri = Uri.fromFile(file1);
 
         sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
-        sendIntent.setType("audio/3gp");
+        sendIntent.setType("video/3gp");
 
         startActivity(sendIntent);
 
